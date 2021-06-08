@@ -28,6 +28,6 @@ async def on_message(message):
 
             await message.channel.send(f'```\n{cowsay.get_output_string(animal, response)}\n```')
     except Exception as e:
-        await message.channel.send(f'{message.author} said {message.content}, but:\n{e}')
+        await message.channel.send(str(e))
 
 client.run(os.getenv('TOKEN'))
