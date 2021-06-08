@@ -17,7 +17,8 @@ async def on_message(message):
         return
 
     try:
-        if match := re.search('^!([^ ]+)say (.*)', message.content):
+        match = re.search('^!([^ ]+)say (.*)', message.content)
+        if match:
             animal = match[1].lower()
             response = match[2]
 
