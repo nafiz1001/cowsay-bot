@@ -1,2 +1,3 @@
-discord.py
-cowsay
+cowsay==4.0
+discord-py-slash-command==1.2.2
+discord.py==1.7.2
