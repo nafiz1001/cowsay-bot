@@ -1,2 +1,2 @@
 discord.py
-git+https://github.com/nafiz1001/cowsay-python
+cowsay
