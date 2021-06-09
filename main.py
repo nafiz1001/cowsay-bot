@@ -1,10 +1,8 @@
-import discord
-import cowsay
-import discord_slash
-
 import os
-import re
-import random
+
+import cowsay
+import discord
+import discord_slash
 
 client = discord.ext.commands.Bot(intents=discord.Intents(), command_prefix="!")
 slash = discord_slash.SlashCommand(client, sync_commands=True)
