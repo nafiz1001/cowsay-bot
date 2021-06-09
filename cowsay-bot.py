@@ -22,7 +22,7 @@ options = options=[
     )
 ]
 
-guild_ids = [int(guild_id) for guild_id in os.getenv('GUILD_IDS').split(",")]
+guild_ids = [int(guild_id) for guild_id in os.getenv('GUILD_IDS').split(" ")]
 
 @slash.slash(name="cowsay", guild_ids=guild_ids, options=options)
 async def cowsayfunc(ctx, character: str, message: str):
