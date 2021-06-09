@@ -1,33 +1,33 @@
 import discord
 import cowsay
+import discord_slash
 
 import os
 import re
 import random
 
-client = discord.Client()
+client = discord.ext.commands.Bot(intents=discord.Intents(), command_prefix="!")
+slash = discord_slash.SlashCommand(client, sync_commands=True)
 
 @client.event
 async def on_ready():
     print('cowsay ready!')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+options = options=[
+    discord_slash.utils.manage_commands.create_option(
+        name="animal", description="Pick your animal spirit!" , option_type=3, required=True, choices = [
+            discord_slash.utils.manage_commands.create_choice(name=animal, value=animal) for animal in cowsay.char_names
+        ]
+    ),
+    discord_slash.utils.manage_commands.create_option(
+        name="message", description="What do you want to say?" , option_type=3, required=True
+    )
+]
 
-    try:
-        match = re.search('^!([^ ]+)say (.*)', message.content)
-        if match:
-            animal = match[1].lower()
-            response = match[2]
+guild_ids = [int(guild_id) for guild_id in os.getenv('GUILD_IDS').split(",")]
 
-            if animal not in cowsay.char_names:
-                response = f'You wanted "{animal}" but only the following animals exist: {", ".join(cowsay.char_names)}'
-                animal = random.choice(list(cowsay.char_names))
-
-            await message.channel.send(f'```\n{cowsay.get_output_string(animal, response)}\n```')
-    except Exception as e:
-        await message.channel.send(str(e))
+@slash.slash(name="cowsay", guild_ids=guild_ids, options=options)
+async def cowsayfunc(ctx, animal: str, message: str):
+    await ctx.send(content=f'```\n{cowsay.get_output_string(animal, message)}```\n')
 
 client.run(os.getenv('TOKEN'))
