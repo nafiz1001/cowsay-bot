@@ -11,7 +11,7 @@ slash = discord_slash.SlashCommand(client, sync_commands=True)
 
 @client.event
 async def on_ready():
-    print('cowsay ready!')
+    cowsay.cow("I'm ready!")
 
 options = options=[
     discord_slash.utils.manage_commands.create_option(
