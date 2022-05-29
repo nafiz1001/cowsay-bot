@@ -1,5 +1,7 @@
 # Cowsay Bot
 
+![cowsay-bot running in docker](./screenshot.png)
+
 A cowsay discord bot written in python
 
 ## Usage
