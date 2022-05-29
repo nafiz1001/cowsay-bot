@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+from os import getenv
 
 import cowsay
 import discord
@@ -24,10 +24,10 @@ options = options=[
     )
 ]
 
-guild_ids = [int(guild_id) for guild_id in os.getenv('GUILD_IDS').split(" ")]
+guild_ids = [int(guild_id) for guild_id in getenv('GUILD_IDS').split(" ")]
 
 @slash.slash(name="cowsay", guild_ids=guild_ids, options=options)
 async def cowsayfunc(ctx, character: str, message: str):
     await ctx.send(content=f'```\n{cowsay.get_output_string(character, message)}```\n')
 
-client.run(os.getenv('TOKEN'))
+client.run(getenv('TOKEN'))
