@@ -14,7 +14,7 @@ A cowsay discord bot written in python
 ### Venv Usage
 
 1. Create and use `venv`: `python3 -m venv .venv && . .venv/bin/activate`
-1. Install dependencies: `pip install -r requirements`
+1. Install dependencies: `pip install -r requirements.txt`
 1. Star the bot: `TOKEN="your token" GUILD_IDS="guild IDs separated by a single space" ./cowsay-bot`
 
 ### Docker Usage
