@@ -20,4 +20,4 @@ A cowsay discord bot written in python
 ### Docker Usage
 
 1. `docker build -t "cowsay-bot" .`
-1. `docker run -e "TOKEN=your token" -e "GUILD_IDS=guild IDs separated by a single space" cowsay-bot`
+1. `docker run -e "TOKEN=your token" -e "GUILD_IDS=guild IDs separated by a single space" cowsay-bot.py`
