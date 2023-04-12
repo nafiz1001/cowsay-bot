@@ -15,9 +15,9 @@ A cowsay discord bot written in python
 
 1. Create and use `venv`: `python3 -m venv .venv && . .venv/bin/activate`
 1. Install dependencies: `pip install -r requirements.txt`
-1. Star the bot: `TOKEN="your token" GUILD_IDS="guild IDs separated by a single space" ./cowsay-bot`
+1. Star the bot: `TOKEN="your token" GUILD_IDS="guild IDs separated by a single space" ./cowsay-bot.py`
 
 ### Docker Usage
 
 1. `docker build -t "cowsay-bot" .`
-1. `docker run -e "TOKEN=your token" -e "GUILD_IDS=guild IDs separated by a single space" cowsay-bot.py`
+1. `docker run -e "TOKEN=your token" -e "GUILD_IDS=guild IDs separated by a single space" cowsay-bot`
