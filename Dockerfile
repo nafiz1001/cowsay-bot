@@ -1,4 +1,4 @@
-FROM python:3.10.4-alpine
+FROM docker.io/library/python:3.11.9-alpine3.20
 
 WORKDIR /usr/src/cowsay-bot
 
