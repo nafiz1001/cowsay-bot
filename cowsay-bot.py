@@ -19,12 +19,11 @@ GUILD_IDS = getenv("GUILD_IDS") or dotenv["GUILD_IDS"]
 if not GUILD_IDS:
     raise Exception("GUILD_IDS environment variable must be defined")
 GUILD_IDS = [int(guild_id) for guild_id in GUILD_IDS.split(",")]
+GUILDS = [discord.Object(guild_id) for guild_id in GUILD_IDS]
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
-
-GUILDS = [discord.Object(guild_id) for guild_id in GUILD_IDS]
 
 @tree.command(
     name="cowsay",
