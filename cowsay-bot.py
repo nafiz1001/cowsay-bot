@@ -27,7 +27,7 @@ tree = discord.app_commands.CommandTree(client)
 
 @tree.command(
     name="cowsay",
-    description="cowsay for GNU/Linux was initially written in perl by Tony Monroe",
+    description="Make a character say something.",
     guilds=GUILDS,
 )
 async def _cowsay(
