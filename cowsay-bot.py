@@ -36,16 +36,22 @@ async def _cowsay(
         text: str,
 ):
     print(f"Sending a {character} at {datetime.datetime.now()}")
-    await interaction.response.send_message(f'```\n{cowsay.get_output_string(character.lower(), text)}\n```')
+    character = character.lower()
+    if character in cowsay.CHARS:
+        await interaction.response.send_message(f"```\n{cowsay.get_output_string(character, text)}\n```")
+    else:
+        say = cowsay.get_output_string("cow", f"{character} does not exist as a character. Try the following: {', '.join(cowsay.char_names)}.")
+        await interaction.response.send_message(f"```\n{say}\n```")
 
 @_cowsay.autocomplete("character")
 async def character_autocomplete(
         interaction: discord.Interaction,
         current: str,
 ):
+    current = current.lower()
     return [
         discord.app_commands.Choice(name=char, value=char)
-        for char in cowsay.char_names if current.lower() in char
+        for char in cowsay.char_names if current in char
     ][:25]
     
 
