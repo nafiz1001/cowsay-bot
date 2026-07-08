@@ -37,11 +37,18 @@ async def _cowsay(
 ):
     print(f"Sending a {character} at {datetime.datetime.now()}")
     character = character.lower()
-    if character in cowsay.CHARS:
-        await interaction.response.send_message(f"```\n{cowsay.get_output_string(character, text)}\n```")
-    else:
-        say = cowsay.get_output_string("cow", f"{character} does not exist as a character. Try the following: {', '.join(cowsay.char_names)}.")
-        await interaction.response.send_message(f"```\n{say}\n```")
+    if not character in cowsay.CHARS:
+        character = "cow"
+        text = f"{character} does not exist as a character. Try the following: {', '.join(cowsay.char_names)}."
+
+    message = f"```\n{cowsay.get_output_string(character, text)}\n```"
+    MESSAGE_MAX = 2000
+    if len(message) >= MESSAGE_MAX:
+        extra_count = len(message) - MESSAGE_MAX
+        text = text[:-extra_count-len("...")] + "..."
+        message = f"```\n{cowsay.get_output_string(character, text)}\n```"
+
+    await interaction.response.send_message(message)
 
 @_cowsay.autocomplete("character")
 async def character_autocomplete(
