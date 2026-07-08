@@ -1,29 +1,31 @@
 #!/usr/bin/env python3
 
 import datetime
+import os
 
-from dotenv import dotenv_values
-from os import getenv
-
-import cowsay
-
+import cowsay # pyright: ignore[reportMissingTypeStubs]
 import discord
+import dotenv
 
-dotenv = dotenv_values(".env")
+dotenv.load_dotenv()
 
-TOKEN = getenv("TOKEN") or dotenv["TOKEN"]
-if not TOKEN:
-    raise Exception("TOKEN environment variable must be defined")
-
-GUILD_IDS = getenv("GUILD_IDS") or dotenv["GUILD_IDS"]
-if not GUILD_IDS:
-    raise Exception("GUILD_IDS environment variable must be defined")
-GUILD_IDS = [int(guild_id) for guild_id in GUILD_IDS.split(",")]
+TOKEN = os.environ["TOKEN"]
+GUILD_IDS = [int(guild_id) for guild_id in os.environ["GUILD_IDS"].split(",")]
 GUILDS = [discord.Object(guild_id) for guild_id in GUILD_IDS]
+MESSAGE_LENGTH_MAX = 2000
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
+
+def get_truncated_cowsay(character: str, say: str, backoff: int = 1) -> str:
+    message = f"```\n{cowsay.get_output_string(character, say)}\n```"
+    if len(message) <= MESSAGE_LENGTH_MAX:
+        return message
+
+    truncate_by = len(message) - MESSAGE_LENGTH_MAX
+    say = say[:-1 - truncate_by - len("...") - backoff] + "..."
+    return get_truncated_cowsay(character, say, backoff*2)
 
 @tree.command(
     name="cowsay",
@@ -37,24 +39,18 @@ async def _cowsay(
 ):
     print(f"Sending a {character} at {datetime.datetime.now()}")
     character = character.lower()
+
     if not character in cowsay.CHARS:
         character = "cow"
         text = f"{character} does not exist as a character. Try the following: {', '.join(cowsay.char_names)}."
 
-    message = f"```\n{cowsay.get_output_string(character, text)}\n```"
-    MESSAGE_MAX = 2000
-    if len(message) >= MESSAGE_MAX:
-        extra_count = len(message) - MESSAGE_MAX
-        text = text[:-extra_count-len("...")] + "..."
-        message = f"```\n{cowsay.get_output_string(character, text)}\n```"
-
-    await interaction.response.send_message(message)
+    await interaction.response.send_message(get_truncated_cowsay(character, text))
 
 @_cowsay.autocomplete("character")
 async def character_autocomplete(
         interaction: discord.Interaction,
         current: str,
-):
+) -> list[discord.app_commands.Choice[str]]:
     current = current.lower()
     return [
         discord.app_commands.Choice(name=char, value=char)
@@ -66,6 +62,6 @@ async def character_autocomplete(
 async def on_ready():
     for guild in GUILDS:
         await tree.sync(guild=guild)
-    cowsay.cow(f"I'm ready! GUILD_IDS={GUILD_IDS}")
+    cowsay.cow(f"I'm ready! GUILD_IDS={GUILD_IDS}") # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 
 client.run(TOKEN)
