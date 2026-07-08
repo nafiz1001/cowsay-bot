@@ -18,14 +18,14 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = discord.app_commands.CommandTree(client)
 
-def get_truncated_cowsay(character: str, say: str, backoff: int = 1) -> str:
+def get_cowsay_for_discord(character: str, say: str, backoff: int = 1) -> str:
     message = f"```\n{cowsay.get_output_string(character, say)}\n```"
     if len(message) <= MESSAGE_LENGTH_MAX:
         return message
 
     truncate_by = len(message) - MESSAGE_LENGTH_MAX
     say = say[:-1 - truncate_by - len("...") - backoff] + "..."
-    return get_truncated_cowsay(character, say, backoff*2)
+    return get_cowsay_for_discord(character, say, backoff*2)
 
 @tree.command(
     name="cowsay",
@@ -44,7 +44,7 @@ async def _cowsay(
         character = "cow"
         text = f"{character} does not exist as a character. Try the following: {', '.join(cowsay.char_names)}."
 
-    await interaction.response.send_message(get_truncated_cowsay(character, text))
+    await interaction.response.send_message(get_cowsay_for_discord(character, text))
 
 @_cowsay.autocomplete("character")
 async def character_autocomplete(
